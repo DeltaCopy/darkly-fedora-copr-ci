@@ -1,13 +1,13 @@
 # Credits: hazel-bunny (https://github.com/hazel-bunny)
 
-%define style Lightly
-%define _style lightly
+%define style Darkly
+%define _style darkly
 %define dev Bali10050
 %define _qt_major_version 6
 %define _qt5_major_version 5
 %define qt5_version 5.15.2
 %define kf5_version 5.102.0
-%define release_tag 0.5.12
+%define release_tag 0.5.13
 
 Name:           %{_style}-qt%{_qt_major_version}
 Version:        %{release_tag}
