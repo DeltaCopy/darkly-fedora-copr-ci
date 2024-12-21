@@ -9,7 +9,7 @@
 %define kf5_version 5.102.0
 %define release_tag 0.5.13
 
-Name:           %{_style}-qt%{_qt_major_version}
+Name:           %{_style}
 Version:        %{release_tag}
 Release:        1%{?dist}
 Summary:        A modern style for qt applications
