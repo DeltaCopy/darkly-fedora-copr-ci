@@ -54,7 +54,7 @@ BuildRequires:  cmake(KF%{_qt_major_version}Notifications)
 BuildRequires:  cmake(KF%{_qt_major_version}Package)
 BuildRequires:  cmake(KF%{_qt_major_version}WindowSystem)
 
-#lightly5 dependencies
+#darkly5 dependencies
 BuildRequires:  cmake(KF%{_qt5_major_version}KCMUtils)
 BuildRequires:  cmake(KF%{_qt5_major_version}Config) >= %{kf5_version}
 BuildRequires:  cmake(KF%{_qt5_major_version}ConfigWidgets) >= %{kf5_version}
@@ -105,7 +105,7 @@ Lightly is a fork of breeze theme style that aims to be visually modern and mini
 %license COPYING
 %doc AUTHORS README.md
 
-%{_bindir}/lightly-settings%{_qt_major_version}
+%{_bindir}/%{_style}-settings%{_qt_major_version}
 
 %{_libdir}/cmake/%{style}/
 %{_libdir}/lib%{_style}common%{_qt_major_version}.so.*
