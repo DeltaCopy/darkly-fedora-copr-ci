@@ -7,12 +7,12 @@
 %define _qt5_major_version 5
 %define qt5_version 5.15.2
 %define kf5_version 5.102.0
-%define release_tag 0.5.13
+%define release_tag 0.5.14
 
 Name:           %{_style}
 Version:        %{release_tag}
 Release:        1%{?dist}
-Summary:        A modern style for qt applications
+Summary:        Fork of Lightly (A modern style for Qt applications)
 License:        GPL-2.0-or-later
 Group:          System/GUI/KDE
 
@@ -84,7 +84,7 @@ BuildRequires:  kf%{_qt_major_version}-kpackage-devel
 Obsoletes:      %{_style} <= %{version}
 
 %description
-Lightly is a fork of breeze theme style that aims to be visually modern and minimalistic.
+Darkly is a fork of Lightly, which in turn is forked from the Breeze theme style that aims to be visually modern and minimalistic.
 
 %prep
 %autosetup -n %{style}-%{version} -p1
