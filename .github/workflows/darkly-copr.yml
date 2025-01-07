@@ -4,10 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       release_tag:
-        description: Use the latest Darkly release tag from Bali10050/Darkly, latest (default), or manually enter one but must start with 'v'
+        description: latest (default), or manually add one with 'v'
         required: true
         default: latest
-
 env:
   COPR_PROJECT: darkly
   COPR_USERNAME: deltacopy
