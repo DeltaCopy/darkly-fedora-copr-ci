@@ -2,7 +2,7 @@
 
 All build specs credits go to @hazel-bunny (https://github.com/hazel-bunny)
 
-Fedora Copr builds: <https://copr.fedorainfracloud.org/coprs/deltacopy/darkly/builds>
+This auto triggers Fedora Copr builds: <https://copr.fedorainfracloud.org/coprs/deltacopy/darkly/builds>
 
 Builds from src: https://github.com/Bali10050/Darkly
 

@@ -1,0 +1,53 @@
+# Build Darkly and publish release
+name: Darkly Fedora COPR build
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Use the latest Darkly release tag from Bali10050/Darkly, latest (default), or manually enter one but must start with 'v'
+        required: true
+        default: latest
+
+env:
+  COPR_PROJECT: darkly
+  COPR_USERNAME: deltacopy
+  COPR_URL: https://copr.fedorainfracloud.org
+  PACKAGE_UTILS_REPO: darkly-packager
+  PACKAGE_UTILS_REPO_OWNER: deltacopy
+  PACKAGE_RELEASE_TAG: ${{ inputs.release_tag }}
+jobs:
+  COPR-Auto-Build:
+    runs-on: ubuntu-latest
+    container: fedora:latest
+    steps:
+      - name: Checkout packager utils repository
+        uses: actions/checkout@v4.2.0
+        with:
+          repository: ${{ env.PACKAGE_UTILS_REPO_OWNER }}/${{ env.PACKAGE_UTILS_REPO }}
+
+      - name: Install dependencies
+        run: sudo dnf install -y -q copr-cli python3 git
+
+      - name: Update package files
+        run: |
+          case "${{ env.PACKAGE_RELEASE_TAG }}" in
+            latest)
+              python packager.py --dist fedora
+            ;;
+            *)
+              python packager.py --dist fedora --tag ${{ env.PACKAGE_RELEASE_TAG }}
+            ;;
+          esac
+
+      - name: Update copr-cli configuration
+        run: |
+          mkdir $HOME/.config
+          cat <<EOF > $HOME/.config/copr
+          [copr-cli]
+          login = ${{ secrets.COPR_BUILD_L }}
+          username = ${{ env.COPR_USERNAME }}
+          token = ${{ secrets.COPR_BUILD_T }}
+          copr_url = ${{ env.COPR_URL }}
+          EOF
+      - name: Trigger COPR build
+        run: copr-cli build ${{ env.COPR_PROJECT }} output/COPR/specs/darkly.spec
