@@ -3,12 +3,6 @@ name: Darkly Fedora COPR build
 on:
   schedule:
     - cron: '0 00 * * *' # At 00:00 daily
-  workflow_dispatch:
-    inputs:
-      release_tag:
-        description: latest (default), or e.g. 'v0.5'
-        required: true
-        default: latest
 env:
   COPR_PROJECT: darkly
   COPR_USERNAME: deltacopy
@@ -16,6 +10,7 @@ env:
   PACKAGE_UTILS_REPO: darkly-packager
   PACKAGE_UTILS_REPO_OWNER: deltacopy
   PACKAGE_RELEASE_TAG: ${{ inputs.release_tag }}
+  RELEASE_TAG: latest
 jobs:
   copr-ci:
     runs-on: ubuntu-latest
