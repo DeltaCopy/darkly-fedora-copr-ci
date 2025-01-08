@@ -1,10 +1,12 @@
 # Build Darkly and publish release
 name: Darkly Fedora COPR build
 on:
+  schedule:
+    - cron: '0 00 * * *' # At 00:00 daily
   workflow_dispatch:
     inputs:
       release_tag:
-        description: latest (default), or manually add one with 'v'
+        description: latest (default), or e.g. 'v0.5'
         required: true
         default: latest
 env:
@@ -15,7 +17,7 @@ env:
   PACKAGE_UTILS_REPO_OWNER: deltacopy
   PACKAGE_RELEASE_TAG: ${{ inputs.release_tag }}
 jobs:
-  COPR-Auto-Build:
+  copr-ci:
     runs-on: ubuntu-latest
     container: fedora:latest
     steps:
@@ -32,9 +34,13 @@ jobs:
           case "${{ env.PACKAGE_RELEASE_TAG }}" in
             latest)
               python packager.py --dist fedora
+              RELEASE_LATEST_VERSION=$(cat packager.log | grep "Latest tag =" | awk -F "=" {'print $2'} | xargs)
+              test ! -z "$RELEASE_LATEST_VERSION" && echo "RELEASE_VERSION=${RELEASE_LATEST_VERSION#?}" | tee -a "$GITHUB_ENV" || exit 1
             ;;
             *)
               python packager.py --dist fedora --tag ${{ env.PACKAGE_RELEASE_TAG }}
+              RELEASE_LATEST_VERSION=$(cat packager.log | grep "Latest tag =" | awk -F "=" {'print $2'} | xargs)
+              test ! -z "$RELEASE_LATEST_VERSION" && echo "RELEASE_VERSION=${RELEASE_LATEST_VERSION#?}" | tee -a "$GITHUB_ENV" || exit 1
             ;;
           esac
 
@@ -48,5 +54,17 @@ jobs:
           token = ${{ secrets.COPR_BUILD_T }}
           copr_url = ${{ env.COPR_URL }}
           EOF
+      - name: Get latest COPR build information
+        run: |
+          LATEST_COPR=$(copr-cli get-package deltacopy/darkly --name darkly | python -c 'import json,sys;obj=json.load(sys.stdin);print(obj["latest_build"]["source_package"]["version"]);')
+          
+          if [[ ${LATEST_COPR%-*} < ${{ env.RELEASE_VERSION }} ]] || [[ -z ${LATEST_COPR%-*} ]]; then
+            echo "START_BUILD=true" >> "$GITHUB_ENV"
+          else
+            echo "START_BUILD=false" >> "$GITHUB_ENV"
+          fi
+      
       - name: Trigger COPR build
+        if: env.START_BUILD == 'true'
         run: copr-cli build ${{ env.COPR_PROJECT }} output/COPR/specs/darkly.spec
+
