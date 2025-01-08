@@ -9,7 +9,6 @@ env:
   COPR_URL: https://copr.fedorainfracloud.org
   PACKAGE_UTILS_REPO: darkly-packager
   PACKAGE_UTILS_REPO_OWNER: deltacopy
-  PACKAGE_RELEASE_TAG: ${{ inputs.release_tag }}
   RELEASE_TAG: latest
 jobs:
   copr-ci:
@@ -26,14 +25,14 @@ jobs:
 
       - name: Update package files
         run: |
-          case "${{ env.PACKAGE_RELEASE_TAG }}" in
+          case "${{ env.RELEASE_TAG }}" in
             latest)
               python packager.py --dist fedora
               RELEASE_LATEST_VERSION=$(cat packager.log | grep "Latest tag =" | awk -F "=" {'print $2'} | xargs)
               test ! -z "$RELEASE_LATEST_VERSION" && echo "RELEASE_VERSION=${RELEASE_LATEST_VERSION#?}" | tee -a "$GITHUB_ENV" || exit 1
             ;;
             *)
-              python packager.py --dist fedora --tag ${{ env.PACKAGE_RELEASE_TAG }}
+              python packager.py --dist fedora --tag ${{ env.RELEASE_TAG }}
               RELEASE_LATEST_VERSION=$(cat packager.log | grep "Latest tag =" | awk -F "=" {'print $2'} | xargs)
               test ! -z "$RELEASE_LATEST_VERSION" && echo "RELEASE_VERSION=${RELEASE_LATEST_VERSION#?}" | tee -a "$GITHUB_ENV" || exit 1
             ;;
