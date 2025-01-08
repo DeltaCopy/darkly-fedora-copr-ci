@@ -50,7 +50,7 @@ jobs:
           EOF
       - name: Get latest COPR build information
         run: |
-          LATEST_COPR=$(copr-cli get-package deltacopy/darkly --name darkly | python -c 'import json,sys;obj=json.load(sys.stdin);print(obj["latest_build"]["source_package"]["version"]);')
+          LATEST_COPR=$(copr-cli get-package ${{ env.COPR_USERNAME }}/${{ env.COPR_PROJECT }} --name ${{ env.COPR_PROJECT }} | python -c 'import json,sys;obj=json.load(sys.stdin);print(obj["latest_build"]["source_package"]["version"]);')
           
           if [[ ${LATEST_COPR%-*} < ${{ env.RELEASE_VERSION }} ]] || [[ -z ${LATEST_COPR%-*} ]]; then
             echo "START_BUILD=true" >> "$GITHUB_ENV"
@@ -60,5 +60,5 @@ jobs:
       
       - name: Trigger COPR build
         if: env.START_BUILD == 'true'
-        run: copr-cli build ${{ env.COPR_PROJECT }} output/COPR/specs/darkly.spec
+        run: copr-cli build ${{ env.COPR_PROJECT }} output/COPR/specs/${{ env.COPR_PROJECT }}.spec
 
