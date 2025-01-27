@@ -14,13 +14,20 @@ A clear and concise description of what the bug is.
 If applicable, add screenshots to help explain your problem.
 
 **Distribution (please complete the following information):**
- - Name: [e.g. ArchLinux]
+ - Name: [e.g. Arch Linux]
+
+
+**Color scheme in use (please complete the following information):**
+ - Name: [e.g. Breeze Dark]
 
 **Using Wayland (please complete the following information):**
 - Y/N
 
 **Using fractional scaling (please complete the following information):**
 - Y/N
+
+**Darkly Information (please complete the following information):**
+- Version: [e.g. 0.5.15]
 
 **Plasma Information (please complete the following information):**
 - Version: [e.g. 6.2.5]
