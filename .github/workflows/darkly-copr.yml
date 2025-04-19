@@ -21,7 +21,7 @@ jobs:
           repository: ${{ env.PACKAGE_UTILS_REPO_OWNER }}/${{ env.PACKAGE_UTILS_REPO }}
 
       - name: Install dependencies
-        run: sudo dnf install -y -q copr-cli python3 git
+        run: sudo dnf install -y -q copr-cli python3 git gawk
 
       - name: Update package files
         run: |
