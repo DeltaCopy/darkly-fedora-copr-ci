@@ -2,7 +2,7 @@
 name: Darkly Fedora COPR build
 on:
   schedule:
-    - cron: '0 00 * * *' # At 00:00 daily
+    - cron: "0 00 * * *" # At 00:00 daily
 env:
   COPR_PROJECT: darkly
   COPR_USERNAME: deltacopy
@@ -53,14 +53,23 @@ jobs:
           LATEST_COPR=$(copr-cli get-package ${{ env.COPR_USERNAME }}/${{ env.COPR_PROJECT }} --name ${{ env.COPR_PROJECT }} | python -c 'import json,sys;obj=json.load(sys.stdin);print(obj["latest_build"]["source_package"]["version"]);')
 
           echo "Latest COPR version = ${LATEST_COPR%-*}"
-          
-          if [[ ${LATEST_COPR%-*} < ${{ env.RELEASE_VERSION }} ]] || [[ -z ${LATEST_COPR%-*} ]]; then
-            echo "START_BUILD=true" >> "$GITHUB_ENV"
-          else
-            echo "START_BUILD=false" >> "$GITHUB_ENV"
-          fi
-      
-      - name: Trigger COPR build
-        if: env.START_BUILD == 'true'
-        run: copr-cli build ${{ env.COPR_PROJECT }} output/COPR/specs/${{ env.COPR_PROJECT }}.spec
+          echo "Latest Git tag release = ${{ env.LATEST_TAG }}"
 
+          # convert the versions removing the decimal points to ease in comparing them
+
+          copr_version=$(echo "${LATEST_COPR%-*}" | awk -F. '{printf "%03d%03d%03d\n", $1, $2, $3}')
+          git_version=$(echo "${{ env.LATEST_TAG }}" | awk -F. '{printf "%03d%03d%03d\n", $1, $2, $3}')
+
+          if [[ $copr_version < $git_version ]] || [[ -z "$LATEST_COPR" ]]; then
+              echo "START_BUILD=true" >> "$GITHUB_ENV"
+              echo "Starting COPR build"
+          else
+              echo "START_BUILD=false" >> "$GITHUB_ENV"
+              echo "Skipping COPR build"
+          fi
+
+      - name: Start COPR build
+        if: env.START_BUILD == 'true'
+        run: |
+          echo "Starting COPR build"
+          copr-cli build ${{ env.COPR_PROJECT }} output/COPR/specs/${{ env.COPR_PROJECT }}.spec
