@@ -1,8 +1,6 @@
 # Build Darkly and publish release
 name: Darkly Fedora COPR build
-on:
-  schedule:
-    - cron: "0 00 * * *" # At 00:00 daily
+on: workflow_dispatch
 env:
   COPR_PROJECT: darkly
   COPR_USERNAME: deltacopy
@@ -29,12 +27,12 @@ jobs:
             latest)
               python packager.py --dist fedora
               RELEASE_LATEST_VERSION=$(cat packager.log | grep "Latest tag =" | awk -F "=" {'print $2'} | xargs)
-              test ! -z "$RELEASE_LATEST_VERSION" && echo "RELEASE_VERSION=${RELEASE_LATEST_VERSION#?}" | tee -a "$GITHUB_ENV" || exit 1
+              test ! -z "$RELEASE_LATEST_VERSION" && echo "LATEST_TAG=${RELEASE_LATEST_VERSION#?}" | tee -a "$GITHUB_ENV" || exit 1
             ;;
             *)
               python packager.py --dist fedora --tag ${{ env.RELEASE_TAG }}
               RELEASE_LATEST_VERSION=$(cat packager.log | grep "Latest tag =" | awk -F "=" {'print $2'} | xargs)
-              test ! -z "$RELEASE_LATEST_VERSION" && echo "RELEASE_VERSION=${RELEASE_LATEST_VERSION#?}" | tee -a "$GITHUB_ENV" || exit 1
+              test ! -z "$RELEASE_LATEST_VERSION" && echo "LATEST_TAG=${RELEASE_LATEST_VERSION#?}" | tee -a "$GITHUB_ENV" || exit 1
             ;;
           esac
 
