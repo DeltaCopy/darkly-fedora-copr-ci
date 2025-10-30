@@ -1,6 +1,8 @@
 # Build Darkly and publish release
 name: Darkly Fedora COPR build
-on: workflow_dispatch
+on:
+  schedule:
+    - cron: "0 00 * * *" # At 00:00 daily
 env:
   COPR_PROJECT: darkly
   COPR_USERNAME: deltacopy
