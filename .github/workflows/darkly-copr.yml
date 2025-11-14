@@ -31,7 +31,7 @@ jobs:
 
           echo "LATEST_TAG=$tagname" >> "$GITHUB_ENV"
 
-          ${{ env.SPEC_FILE }}.template ${{ env.SPEC_FILE }}
+          mv ${{ env.SPEC_FILE }}.template ${{ env.SPEC_FILE }}
 
           sed -i "s/.*%define release_tag.*/%define release_tag ${tagname}/" ${{ env.SPEC_FILE }}
       - name: Update copr-cli configuration
