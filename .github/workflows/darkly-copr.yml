@@ -6,9 +6,9 @@ env:
   COPR_USERNAME: deltacopy
   COPR_URL: https://copr.fedorainfracloud.org
   BUILD_REPO: https://github.com/Bali10050/darkly
-  SPEC_FILE: $GITHUB_WORKSPACE/freetube.spec
+  SPEC_FILE: $GITHUB_WORKSPACE/darkly.spec
 jobs:
-  copr-ci:
+  darkly-copr-ci:
     runs-on: ubuntu-latest
     container: fedora:latest
     steps:
