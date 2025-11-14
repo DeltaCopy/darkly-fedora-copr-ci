@@ -1,43 +1,39 @@
 # Build Darkly and publish release
 name: Darkly Fedora COPR build
-on:
-  schedule:
-    - cron: "0 00 * * *" # At 00:00 daily
+on: workflow_dispatch
 env:
   COPR_PROJECT: darkly
   COPR_USERNAME: deltacopy
   COPR_URL: https://copr.fedorainfracloud.org
-  PACKAGE_UTILS_REPO: darkly-packager
-  PACKAGE_UTILS_REPO_OWNER: deltacopy
-  RELEASE_TAG: latest
+  BUILD_REPO: https://github.com/Bali10050/darkly
+  SPEC_FILE: $GITHUB_WORKSPACE/freetube.spec
 jobs:
   copr-ci:
     runs-on: ubuntu-latest
     container: fedora:latest
     steps:
       - name: Checkout packager utils repository
-        uses: actions/checkout@v4.2.0
+        uses: actions/checkout@v5
         with:
-          repository: ${{ env.PACKAGE_UTILS_REPO_OWNER }}/${{ env.PACKAGE_UTILS_REPO }}
-
+          repository: ${{ github.repository }}
+          sparse-checkout-cone-mode: false
       - name: Install dependencies
         run: sudo dnf install -y -q copr-cli python3 git gawk
-
-      - name: Update package files
+      - name: Get latest tag
         run: |
-          case "${{ env.RELEASE_TAG }}" in
-            latest)
-              python packager.py --dist fedora
-              RELEASE_LATEST_VERSION=$(cat packager.log | grep "Latest tag =" | awk -F "=" {'print $2'} | xargs)
-              test ! -z "$RELEASE_LATEST_VERSION" && echo "LATEST_TAG=${RELEASE_LATEST_VERSION#?}" | tee -a "$GITHUB_ENV" || exit 1
-            ;;
-            *)
-              python packager.py --dist fedora --tag ${{ env.RELEASE_TAG }}
-              RELEASE_LATEST_VERSION=$(cat packager.log | grep "Latest tag =" | awk -F "=" {'print $2'} | xargs)
-              test ! -z "$RELEASE_LATEST_VERSION" && echo "LATEST_TAG=${RELEASE_LATEST_VERSION#?}" | tee -a "$GITHUB_ENV" || exit 1
-            ;;
-          esac
+          latest_tag=$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags $BUILD_REPO '*.*' \
+            | tail --lines=1 | cut --delimiter='/' --fields=3)
 
+          echo "INFO: Latest tag = $latest_tag"
+
+          # use the tag name but strip the 'v' and '-beta' for the asset name to publish
+          tagname=$(echo $latest_tag | sed 's/^v//g;s/-beta//g')
+
+          echo "LATEST_TAG=$tagname" >> "$GITHUB_ENV"
+
+          ${{ env.SPEC_FILE }}.template ${{ env.SPEC_FILE }}
+
+          sed -i "s/.*%define release_tag.*/%define release_tag ${tagname}/" ${{ env.SPEC_FILE }}
       - name: Update copr-cli configuration
         run: |
           mkdir $HOME/.config
@@ -72,4 +68,4 @@ jobs:
         if: env.START_BUILD == 'true'
         run: |
           echo "Starting COPR build"
-          copr-cli build ${{ env.COPR_PROJECT }} output/COPR/specs/${{ env.COPR_PROJECT }}.spec
+          
