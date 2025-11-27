@@ -8,7 +8,7 @@ Upstream: https://github.com/Bali10050/Darkly
 
 #### GitHub Actions scheduled build status
 
-[![Darkly Fedora COPR build](https://github.com/DeltaCopy/darkly-fedora-copr/actions/workflows/darkly-copr.yml/badge.svg)](https://github.com/DeltaCopy/darkly-fedora-copr/actions/workflows/darkly-copr.yml)
+[![Darkly Fedora COPR build CI](https://github.com/DeltaCopy/darkly-fedora-copr-ci/actions/workflows/darkly-fedora-copr-ci.yml/badge.svg)](https://github.com/DeltaCopy/darkly-fedora-copr-ci/actions/workflows/darkly-fedora-copr-ci.yml)
 
 #### Fedora Copr last build status
 
