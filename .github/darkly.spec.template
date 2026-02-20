@@ -14,7 +14,6 @@ Version:        %{release_tag}
 Release:        1%{?dist}
 Summary:        Fork of Lightly (A modern style for Qt applications)
 License:        GPL-2.0-or-later
-Group:          System/GUI/KDE
 
 URL:            https://github.com/%{dev}/%{style}
 Source0:        https://github.com/%{dev}/%{style}/archive/refs/tags/v%{version}.tar.gz
