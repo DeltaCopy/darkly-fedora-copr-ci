@@ -1,39 +1,110 @@
 # Build Darkly and publish release
 name: Darkly Fedora COPR build CI
-on:
-  schedule:
-    - cron: "0 00 * * *" # At 00:00 daily
+on: workflow_dispatch
 env:
   COPR_PROJECT: darkly
   COPR_USERNAME: deltacopy
   COPR_URL: https://copr.fedorainfracloud.org
   BUILD_REPO: https://github.com/Bali10050/darkly
   SPEC_FILE: $GITHUB_WORKSPACE/.github/darkly.spec
+  GIT_USER: DeltaCopy
+  REPO_DEV: Bali10050
+  REPO_NAME: darkly
 jobs:
-  darkly-copr-ci:
+  GetLatestVersion:
+    runs-on: ubuntu-latest
+    outputs:
+      VERSION: ${{ steps.step_version.outputs.VERSION }}
+    steps:
+      - name: Install jq
+        run: sudo apt-get update -y && sudo apt-get install -y jq
+      - name: Get latest version
+        id: step_version
+        run: |
+          # get latest release tag from remote
+
+          latest_release_tag=$(curl -s https://api.github.com/repos/$REPO_DEV/$REPO_NAME/releases/latest |  jq -r '.tag_name')
+
+          echo "INFO: Latest tag = $latest_release_tag"
+          echo "INFO: Latest tag = $latest_release_tag"
+
+          if [ ! -z $latest_release_tag ]; then
+            latest_tag=$(echo $latest_release_tag | sed 's/v//')
+            echo "VERSION=${latest_release_tag}" >> "$GITHUB_OUTPUT"
+          else
+            echo "Latest tag is unknown"
+            exit 1
+          fi
+
+      - name: Checkout local
+        uses: actions/checkout@v6.0.2
+        with:
+          repository: ${{ github.repository }}
+
+      - name: Update README
+        run: |
+          echo ${{ steps.step_version.outputs.VERSION }}
+          cat << EOF > README.md
+            # # darkly-fedora-copr-ci
+            RPM build spec for building Darkly on the Fedora COPR.
+
+            All build specs credits go to @hazel-bunny (https://github.com/hazel-bunny)
+
+            This auto triggers Fedora Copr builds: <https://copr.fedorainfracloud.org/coprs/deltacopy/darkly/builds>
+
+            Upstream: https://github.com/Bali10050/Darkly
+
+            ## Active releases available
+
+            - Fedora 42
+            - Fedora 43
+            - Fedora rawhide
+
+            # Instructions
+
+            Enable the COPR repository then install the package.
+
+            <pre>
+            sudo dnf copr enable deltacopy/darkly
+            sudo dnf in darkly
+            </pre>
+
+            #### GitHub Actions scheduled build status
+
+            [![Darkly Fedora COPR build CI](https://github.com/DeltaCopy/darkly-fedora-copr-ci/actions/workflows/darkly-fedora-copr-ci.yml/badge.svg)](https://github.com/DeltaCopy/darkly-fedora-copr-ci/actions/workflows/darkly-fedora-copr-ci.yml)
+
+            #### Fedora Copr last build status
+
+            [![Copr build status](https://copr.fedorainfracloud.org/coprs/deltacopy/darkly/package/darkly/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/deltacopy/darkly/package/darkly/)
+
+            ## Latest version
+            ${{ steps.step_version.outputs.VERSION }}
+          EOF
+          git config --global user.name $GIT_USER
+          git config --global user.email ecto1@duck.com
+          git add README.md
+          git commit --allow-empty -m "[Darkly Fedora COPR CI]: Update version"
+          git push --force -v
+  UpdateFedoraCOPR:
+    needs: GetLatestVersion
     runs-on: ubuntu-latest
     container: fedora:latest
     steps:
       - name: Checkout local
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4.2.0
         with:
           repository: ${{ github.repository }}
           sparse-checkout-cone-mode: false
+
       - name: Install dependencies
         run: sudo dnf install -y -q copr-cli python3 git gawk
+
       - name: Get latest tag
         run: |
-          latest_tag=$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags $BUILD_REPO '*.*' \
-            | tail --lines=1 | cut --delimiter='/' --fields=3)
-
-          echo "INFO: Latest tag = $latest_tag"
-
           # use the tag name but strip the 'v' and '-beta' for the asset name to publish
-          tagname=$(echo $latest_tag | sed 's/^v//g;s/-beta//g')
+          tagname=$(echo ${{ needs.GetLatestVersion.outputs.VERSION }} | sed 's/^v//g;s/-beta//g')
 
           echo "LATEST_TAG=$tagname" >> "$GITHUB_ENV"
-
-          ls -lar $GITHUB_WORKSPACE
 
           mv ${{ env.SPEC_FILE }}.template ${{ env.SPEC_FILE }}
 
