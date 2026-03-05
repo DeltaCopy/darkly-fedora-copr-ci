@@ -1,4 +1,4 @@
-  # # darkly-fedora-copr-ci
+  # darkly-fedora-copr-ci
   RPM build spec for building Darkly on the Fedora COPR.
 
   All build specs credits go to @hazel-bunny (https://github.com/hazel-bunny)
