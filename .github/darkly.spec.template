@@ -123,5 +123,8 @@ Darkly is a fork of Lightly, which in turn is forked from the Breeze theme style
 %{_datadir}/kservices%{_qt_major_version}/%{_style}decorationconfig.desktop
 %{_datadir}/kstyle/themes/%{_style}.themerc
 
+# Desktop Theme
+%{_datadir}/plasma/desktoptheme/%{_style}
+
 %changelog
 %autochangelog
