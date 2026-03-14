@@ -31,4 +31,4 @@
   [![Copr build status](https://copr.fedorainfracloud.org/coprs/deltacopy/darkly/package/darkly/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/deltacopy/darkly/package/darkly/)
 
   ## Latest version
-  v0.5.34
+  v0.5.35
