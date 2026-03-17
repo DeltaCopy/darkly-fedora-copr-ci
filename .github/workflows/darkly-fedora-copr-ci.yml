@@ -80,7 +80,7 @@ jobs:
             [![Copr build status](https://copr.fedorainfracloud.org/coprs/deltacopy/darkly/package/darkly/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/deltacopy/darkly/package/darkly/)
 
             ## Latest version
-            ${{ steps.step_version.outputs.VERSION }}
+            <img src="https://img.shields.io/badge/darkly-${{ steps.step_version.outputs.VERSION }}-orange" alt="darkly-${{ steps.step_version.outputs.VERSION }}">
           EOF
           git config --global user.name $GIT_USER
           git config --global user.email ecto1@duck.com
