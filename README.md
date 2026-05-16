@@ -7,12 +7,6 @@
 
   Upstream: https://github.com/Bali10050/Darkly
 
-  ## Active releases available
-
-  - Fedora 42
-  - Fedora 43
-  - Fedora rawhide
-
   # Instructions
 
   Enable the COPR repository then install the package.
@@ -31,4 +25,6 @@
   [![Copr build status](https://copr.fedorainfracloud.org/coprs/deltacopy/darkly/package/darkly/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/deltacopy/darkly/package/darkly/)
 
   ## Latest version
-  <img src="https://img.shields.io/badge/darkly-v0.5.37-orange" alt="darkly-v0.5.37">
+  <a href="https://github.com/Bali10050/Darkly/releases">
+    <img src="https://img.shields.io/badge/darkly-v0.5.37-orange" alt="darkly-v0.5.37">
+  </a>
