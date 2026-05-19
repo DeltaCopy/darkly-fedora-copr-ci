@@ -1,6 +1,16 @@
 # Build Darkly and publish release
 name: Darkly Fedora COPR build CI manual
-on: workflow_dispatch
+on: 
+  workflow_call:
+    inputs:
+      forceCoprBuild:
+        description: "Force copr build"
+        required: true
+        default: no
+        type: choice
+        options:
+          - yes
+          - no
 env:
   COPR_PROJECT: darkly
   COPR_USERNAME: deltacopy
