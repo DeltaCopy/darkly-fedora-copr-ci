@@ -26,6 +26,6 @@
 
   ## Latest version
   <a href="https://github.com/Bali10050/Darkly/releases">
-    <img src="https://img.shields.io/badge/darkly-null-orange" alt="darkly-null">
+    <img src="https://img.shields.io/badge/darkly-v0.5.37-orange" alt="darkly-v0.5.37">
   </a>
   
