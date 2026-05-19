@@ -6,7 +6,7 @@ env:
   COPR_USERNAME: deltacopy
   COPR_URL: https://copr.fedorainfracloud.org
   BUILD_REPO: https://github.com/Bali10050/darkly
-  SPEC_FILE: $GITHUB_WORKSPACE/.github/darkly-test.spec
+  SPEC_FILE: $GITHUB_WORKSPACE/.github/darkly.spec
   GIT_USER: DeltaCopy
   REPO_DEV: Bali10050
   REPO_NAME: darkly
