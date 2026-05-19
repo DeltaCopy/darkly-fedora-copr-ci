@@ -1,16 +1,13 @@
 # Build Darkly and publish release
 name: Darkly Fedora COPR build CI manual
 on: 
-  workflow_call:
+  workflow_dispatch:
     inputs:
       forceCoprBuild:
         description: "Force copr build"
         required: true
-        default: no
-        type: choice
-        options:
-          - yes
-          - no
+        default: false
+        type: boolean
 env:
   COPR_PROJECT: darkly
   COPR_USERNAME: deltacopy
@@ -128,28 +125,9 @@ jobs:
           token = ${{ secrets.COPR_BUILD_T }}
           copr_url = ${{ env.COPR_URL }}
           EOF
-      - name: Get latest COPR build information
-        run: |
-          LATEST_COPR=$(copr-cli get-package ${{ env.COPR_USERNAME }}/${{ env.COPR_PROJECT }} --name ${{ env.COPR_PROJECT }} | python -c 'import json,sys;obj=json.load(sys.stdin);print(obj["latest_build"]["source_package"]["version"]);')
-
-          echo "Latest COPR version = ${LATEST_COPR%-*}"
-          echo "Latest Git tag release = ${{ env.LATEST_TAG }}"
-
-          # convert the versions removing the decimal points to ease in comparing them
-
-          copr_version=$(echo "${LATEST_COPR%-*}" | awk -F. '{printf "%03d%03d%03d\n", $1, $2, $3}')
-          git_version=$(echo "${{ env.LATEST_TAG }}" | awk -F. '{printf "%03d%03d%03d\n", $1, $2, $3}')
-
-          if [[ $copr_version < $git_version ]] || [[ -z "$LATEST_COPR" ]]; then
-              echo "START_BUILD=true" >> "$GITHUB_ENV"
-              echo "Starting COPR build"
-          else
-              echo "START_BUILD=false" >> "$GITHUB_ENV"
-              echo "Skipping COPR build"
-          fi
 
       - name: Start COPR build
-        if: env.START_BUILD == 'true'
+        if: ${{ inputs.forceCoprBuild }}
         run: |
           echo "Starting COPR build"
           copr-cli build ${{ env.COPR_PROJECT }} ${{ env.SPEC_FILE }}
