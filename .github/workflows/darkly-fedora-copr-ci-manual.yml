@@ -70,6 +70,14 @@ jobs:
             sudo dnf in darkly
             </pre>
 
+            ## Package structure
+
+            The overall package is now split into 2 dependencies darkly-qt6 and darkly-qt5
+
+            Installing `darkly` provides darkly6.so and darkly5.so respectively.
+
+            The .spec file can be found at https://github.com/DeltaCopy/darkly-fedora-copr-ci/blob/main/.github/darkly.spec.template
+           
             #### GitHub Actions scheduled build status
 
             [![Darkly Fedora COPR build CI](https://github.com/DeltaCopy/darkly-fedora-copr-ci/actions/workflows/darkly-fedora-copr-ci.yml/badge.svg)](https://github.com/DeltaCopy/darkly-fedora-copr-ci/actions/workflows/darkly-fedora-copr-ci.yml)

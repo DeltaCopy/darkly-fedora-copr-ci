@@ -12,7 +12,7 @@ Version:        ${TAG} # this line gets updated automatically by Github Actions
 %define qt6_version 6.7.0
 %define kf6_version 6.10.0
 
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Fork of Lightly (A modern style for Qt applications)
 License:        GPL-2.0-or-later
 URL:            %{forgeurl}
