@@ -23,7 +23,7 @@
   Installing  provides darkly6.so and darkly5.so respectively.
 
   The .spec file can be found at https://github.com/DeltaCopy/darkly-fedora-copr-ci/blob/main/.github/darkly.spec.template
- 
+
   #### GitHub Actions scheduled build status
 
   [![Darkly Fedora COPR build CI](https://github.com/DeltaCopy/darkly-fedora-copr-ci/actions/workflows/darkly-fedora-copr-ci.yml/badge.svg)](https://github.com/DeltaCopy/darkly-fedora-copr-ci/actions/workflows/darkly-fedora-copr-ci.yml)
@@ -36,4 +36,3 @@
   <a href="https://github.com/Bali10050/Darkly/releases">
     <img src="https://img.shields.io/badge/darkly-v0.5.37-orange" alt="darkly-v0.5.37">
   </a>
-  
