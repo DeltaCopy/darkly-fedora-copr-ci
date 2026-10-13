@@ -106,6 +106,18 @@ Darkly is a fork of Lightly, which in turn is forked from the Breeze theme style
 %{_kf6_datadir}/kservices6/%{name}decorationconfig.desktop
 %{_kf6_datadir}/kstyle/themes/%{name}.themerc
 %{_kf6_datadir}/plasma/desktoptheme/%{name}
+%{_kf6_datadir}/locale/de/LC_MESSAGES/darkly_kwin_deco.mo
+%{_kf6_datadir}/locale/de/LC_MESSAGES/darkly_style_config.mo
+%{_kf6_datadir}/locale/fr/LC_MESSAGES/darkly_kwin_deco.mo
+%{_kf6_datadir}/locale/fr/LC_MESSAGES/darkly_style_config.mo
+%{_kf6_datadir}/locale/ja/LC_MESSAGES/darkly_kwin_deco.mo
+%{_kf6_datadir}/locale/ja/LC_MESSAGES/darkly_style_config.mo
+%{_kf6_datadir}/locale/ko/LC_MESSAGES/darkly_kwin_deco.mo
+%{_kf6_datadir}/locale/ko/LC_MESSAGES/darkly_style_config.mo
+%{_kf6_datadir}/locale/zh_CN/LC_MESSAGES/darkly_kwin_deco.mo
+%{_kf6_datadir}/locale/zh_CN/LC_MESSAGES/darkly_style_config.mo
+%{_kf6_datadir}/locale/zh_TW/LC_MESSAGES/darkly_kwin_deco.mo
+%{_kf6_datadir}/locale/zh_TW/LC_MESSAGES/darkly_style_config.mo
 
 #--------------------------------------------------------------------------------------------------
 
